@@ -22,5 +22,5 @@ jobs:
         id: merged-pr-info
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          message: |
+          message: |-
             The dummy task was failed.
