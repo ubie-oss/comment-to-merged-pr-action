@@ -72,7 +72,7 @@ runs:
     - name: "Comment to the merged pull request"
       uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github-token }}
         debug: true
         script: |
           const pr_number = "${{ steps.merged-pr-info.outputs.pull-request-number }}";
