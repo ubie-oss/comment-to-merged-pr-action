@@ -5,7 +5,7 @@ A composite GitHub Action to comment to the merged pull request.
 Please look into [action.yml](action.yml) to see the inputs.
 
 - `github-token`: The GitHub token to access the GitHub API.
-- `comment`: The comment to the merged pull request.
+- `message`: The comment to the merged pull request.
 
 ## Outputs
 - `pull-request-number`: The number of the pull request.
@@ -40,7 +40,7 @@ jobs:
       # The step is triggered only when dummy-failed-step is failed.
       - uses: ubie-oss/comment-to-merged-pr-action@v0.1.0
         if: ${{ failure() }}
-        id: merged-pr-info
+        id: comment-to-merged-pr
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
