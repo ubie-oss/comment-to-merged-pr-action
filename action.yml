@@ -26,9 +26,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # We have to chec kout the default branch outside the composite GitHub Action.
-    - name: "Checkout"
-      uses: actions/checkout@v3
     - name: "Get the commit hash of the merged pull request"
       id: get_commit_hash
       shell: bash

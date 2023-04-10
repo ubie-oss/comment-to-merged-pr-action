@@ -31,7 +31,9 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      # We have to check out the default branch before using the action.
       - uses: actions/checkout@v3
+      # The step is failed.
       - name: "Dummy failed step"
         id: dummy-failed-step
         run: |
