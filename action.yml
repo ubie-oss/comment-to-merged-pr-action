@@ -1,7 +1,6 @@
 # The YAML contains definitions of inputs of the composite GitHub Action.
-name: "Get the merged pull request information"
-description: "Get information about the pull request merged into the default branch"
-author: "yu-iskw"
+name: "Comment to the merged pull request"
+description: "Create a comment to the merged pull request"
 
 branding:
   icon: "code"
