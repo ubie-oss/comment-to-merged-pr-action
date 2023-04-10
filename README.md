@@ -39,7 +39,7 @@ jobs:
           echo "The dummy task was failed."
           exit 1
       # The step is triggered only when dummy-failed-step is failed.
-      - uses: ubie-oss/comment-to-merged-pr-action@v1
+      - uses: ubie-oss/comment-to-merged-pr-action@v1.0.0
         if: ${{ failure() }}
         id: merged-pr-info
         with:
