@@ -24,3 +24,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
             The dummy task was failed.
+            Please take a look at ${{ github.event.workflow_run.url }}
