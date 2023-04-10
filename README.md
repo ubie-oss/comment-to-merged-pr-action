@@ -45,4 +45,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
             The dummy task was failed.
+            Please take a look at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} .
 ```
