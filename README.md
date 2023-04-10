@@ -26,7 +26,6 @@ on:
       - main
 jobs:
   comment:
-    needs: [dummy-failed-job]
     permissions:
       contents: read
       pull-requests: write
@@ -39,10 +38,11 @@ jobs:
           echo "The dummy task was failed."
           exit 1
       # The step is triggered only when dummy-failed-step is failed.
-      - uses: ubie-oss/comment-to-merged-pr-action@v1.0.0
+      - uses: ubie-oss/comment-to-merged-pr-action@v0.1.0
         if: ${{ failure() }}
         id: merged-pr-info
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment: "The dummy task was failed."
+          message: |-
+            The dummy task was failed.
 ```
