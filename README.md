@@ -6,7 +6,7 @@ Please look into [action.yml](action.yml) to see the inputs.
 
 - `github-token`: The GitHub token to access the GitHub API.
 - `message`: The comment to the merged pull request.
-  - CAUTION: Please don't use any back quote (\`) in it, because that causes a syntax error in the github-script action.
+  - NOTE: If we use back quotes in the message, we have to escape them.
 
 ## Outputs
 - `pull-request-number`: The number of the pull request.
@@ -48,5 +48,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
             The dummy task was failed.
+            \`We have to escape back quotes\`.
             Please take a look at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} .
 ```
