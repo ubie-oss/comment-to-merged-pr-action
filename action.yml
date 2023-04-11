@@ -13,7 +13,7 @@ inputs:
   message:
     description: |-
       The message to be commented to the merged pull request.
-      Back quotes aren't allowed, because that causes a syntax error of the github-script action.
+      If we use back quotes in the message, we have to escape them.
     required: true
 
 outputs:
