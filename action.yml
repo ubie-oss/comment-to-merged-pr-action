@@ -11,7 +11,9 @@ inputs:
     description: "GitHub token"
     required: true
   message:
-    description: "The message to be commented to the merged pull request"
+    description: |-
+      The message to be commented to the merged pull request.
+      Back quotes aren't allowed, because that causes a syntax error of the github-script action.
     required: true
 
 outputs:

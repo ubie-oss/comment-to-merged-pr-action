@@ -6,6 +6,7 @@ Please look into [action.yml](action.yml) to see the inputs.
 
 - `github-token`: The GitHub token to access the GitHub API.
 - `message`: The comment to the merged pull request.
+  - CAUTION: Please don't use any back quote (\`) in it, because that causes a syntax error in the github-script action.
 
 ## Outputs
 - `pull-request-number`: The number of the pull request.
