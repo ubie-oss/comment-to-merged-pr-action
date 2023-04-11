@@ -74,11 +74,11 @@ runs:
         debug: true
         script: |
           const pr_number = "${{ steps.get_pr_number.outputs.result }}";
+          const body = `@${{ steps.get_pr_creator.outputs.result }}\n`  + "${{ inputs.message }}";
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: pr_number,
-            body: `@${{ steps.get_pr_creator.outputs.result }}
-            ${{ inputs.message }}`
+            body: body
           });
           console.log(`Commented to the pull request ${pr_number}`);

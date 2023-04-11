@@ -26,4 +26,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
             The dummy task was failed.
+            We can put a `buck-quoted message`.
             Please take a look at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} .
