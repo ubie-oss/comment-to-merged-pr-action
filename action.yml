@@ -1,14 +1,14 @@
 # The YAML contains definitions of inputs of the composite GitHub Action.
-name: "Comment to the merged pull request"
-description: "Create a comment to the merged pull request"
+name: Comment to the merged pull request
+description: Create a comment to the merged pull request
 
 branding:
-  icon: "code"
-  color: "blue"
+  icon: code
+  color: blue
 
 inputs:
   github-token:
-    description: "GitHub token"
+    description: GitHub token
     required: true
   message:
     description: |-
@@ -18,25 +18,24 @@ inputs:
 
 outputs:
   pull-request-number:
-    description: "The pull request number of the pull request created by the composite GitHub Action"
+    description: The pull request number of the pull request created by the composite GitHub Action
     value: ${{ steps.get_pr_number.outputs.result }}
   pull-request-creator:
-    description: "The GitHub account name who created the pull request"
+    description: The GitHub account name who created the pull request
     value: ${{ steps.get_pr_creator.outputs.result }}
 
-
 runs:
-  using: "composite"
+  using: composite
   steps:
-    - name: "Get the commit hash of the merged pull request"
+    - name: Get the commit hash of the merged pull request
       id: get_commit_hash
       shell: bash
       run: |
         echo "commit_hash=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
     # Get the pull request number from the commit hash using github-script
-    - name: "Search the pull request number by the commit hash of the merged pull request"
+    - name: Search the pull request number by the commit hash of the merged pull request
       id: get_pr_number
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github-token }}
         debug: true
@@ -49,9 +48,9 @@ runs:
           console.log(`The pull request number is ${pr_number}`);
           return pr_number;
     # Get the GitHub account name who created the merged pull request by the pull request number
-    - name: "Get the GitHub account name who created the merged pull request"
+    - name: Get the GitHub account name who created the merged pull request
       id: get_pr_creator
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github-token }}
         debug: true
@@ -67,8 +66,8 @@ runs:
           console.log(`The GitHub account name who created the merged pull request is ${pr_creator}`);
           return pr_creator;
     # Create a comment to the merged pull request
-    - name: "Comment to the merged pull request"
-      uses: actions/github-script@v6
+    - name: Comment to the merged pull request
+      uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.github-token }}
         debug: true
