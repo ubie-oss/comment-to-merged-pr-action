@@ -1,8 +1,11 @@
-name: "Create a comment to the merged pull request"
+name: Create a comment to the merged pull request
 on:
   push:
     branches:
       - main
+
+permissions: read-all
+
 jobs:
   comment:
     permissions:
@@ -11,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # We have to check out the default branch before using the action.
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # The step is failed.
-      - name: "Dummy failed step"
+      - name: Dummy failed step
         id: dummy-failed-step
         run: |
           echo "The dummy task was failed."

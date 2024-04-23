@@ -1,0 +1,25 @@
+name: Trunk check
+
+on:
+  pull_request:
+
+concurrency:
+  group: "trunk-check-${{ github.head_ref || github.run_id }}"
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  trunk_check:
+    name: Trunk Check Runner
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write # For trunk to post annotations
+      contents: read # For repo checkout
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # NOTE Trunk.io doesn't support OPA yet in Feburuary, 2024.
+      #      We need something else to check the policy.
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
