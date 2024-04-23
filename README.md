@@ -1,7 +1,9 @@
 # comment-to-merged-pr-action
+
 A composite GitHub Action to comment to the merged pull request.
 
 ## Inputs
+
 Please look into [action.yml](action.yml) to see the inputs.
 
 - `github-token`: The GitHub token to access the GitHub API.
@@ -9,12 +11,14 @@ Please look into [action.yml](action.yml) to see the inputs.
   - NOTE: If we use back quotes in the message, we have to escape them.
 
 ## Outputs
+
 - `pull-request-number`: The number of the pull request.
 - `pull-request-creator`: The creator of the pull request.
 
 ## Use cases
 
 ### Comment to the merged pull request if all jobs are passed
+
 The examples show how to comment to the merged pull request if all jobs are passed.
 We assume that the job1 and job2 are the jobs that are executed when the pull request is merged into the default branch.
 Those can be something like to deploy a product.
