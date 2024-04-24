@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+  # The workflow is tested in a pull request too, as the 'github.sha' context enables us
+  # to get the commit hash of a pull request.
+  pull_request: {}
 
 permissions: read-all
 
