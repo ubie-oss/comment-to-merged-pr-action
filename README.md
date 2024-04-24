@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # We have to check out the default branch before using the action.
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # The step is failed.
       - name: "Dummy failed step"
         id: dummy-failed-step
@@ -45,7 +45,7 @@ jobs:
           echo "The dummy task was failed."
           exit 1
       # The step is triggered only when dummy-failed-step is failed.
-      - uses: ubie-oss/comment-to-merged-pr-action@v0.3.0
+      - uses: ubie-oss/comment-to-merged-pr-action@v0.3.3
         if: ${{ failure() }}
         id: comment-to-merged-pr
         with:
