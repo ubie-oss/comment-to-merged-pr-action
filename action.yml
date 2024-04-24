@@ -46,7 +46,7 @@ runs:
         debug: true
         script: |
           // Retrieve the commit hash from the previous step
-          const isMerged = ${{ inputs.is_merged }} === "1";
+          const isMerged = "${{ inputs.is_merged }}" === "1";
           const commit_hash = "${{ steps.get_commit_hash.outputs.commit_hash }}";
           // Search for merged pull requests containing the commit hash
           const query = `${commit_hash} type:pr ${isMerged ? "is:merged" : ""}`;
