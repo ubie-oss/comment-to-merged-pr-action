@@ -26,7 +26,6 @@ jobs:
         if: ${{ failure() }}
         id: merged-pr-info
         with:
-          is_merged: "1"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           message: |-
             The dummy task was failed.
