@@ -15,11 +15,6 @@ inputs:
       The message to be commented to the merged pull request.
       If we use back quotes in the message, we have to escape them.
     required: true
-  is_merged:
-    description: |-
-      Search for only pull requests if the value is 1.
-    required: false
-    default: "1"
 
 outputs:
   pull-request-number:
@@ -46,20 +41,19 @@ runs:
         debug: true
         script: |
           // Retrieve the commit hash from the previous step
-          const isMerged = "${{ inputs.is_merged }}" === "1";
           const commit_hash = "${{ steps.get_commit_hash.outputs.commit_hash }}";
           // Search for merged pull requests containing the commit hash
-          const query = `${commit_hash} type:pr ${isMerged ? "is:merged" : ""}`;
+          const query = `${commit_hash} type:pr is:merged`;
           console.log(`Searching for merged pull requests with query: "${query}"`)
           const { data: { items } } = await github.rest.search.issuesAndPullRequests({ q: query });
           // Check if any merged pull requests were found
           if (!items || items.length === 0) {
-            throw new Error(`No merged pull requests found. Search query was: "${commit_hash} type:pr is:merged"`);
+            throw new Error(`No merged pull requests found. Search query was: "${query}"`);
           }
           // Find the first pull request item that has a number property
           const pr_item = items.find(item => item.number);
           if (!pr_item) {
-            throw new Error(`No merged pull requests found with a number property. Search query was: "${commit_hash} type:pr is:merged", items found: ${JSON.stringify(items)}`);
+            throw new Error(`No merged pull requests found with a number property. Search query was: "${query}", items found: ${JSON.stringify(items)}`);
           }
           // Extract the pull request number and log it
           const pr_number = pr_item.number;
