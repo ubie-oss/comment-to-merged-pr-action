@@ -40,19 +40,25 @@ runs:
         github-token: ${{ inputs.github-token }}
         debug: true
         script: |
+          // Retrieve the commit hash from the previous step
           const commit_hash = "${{ steps.get_commit_hash.outputs.commit_hash }}";
-          const { data: { items } } = await github.rest.search.issuesAndPullRequests({
-            q: `${commit_hash} type:pr is:merged`
-          });
+          // Search for merged pull requests containing the commit hash
+          const query = `${commit_hash} type:pr is:merged`;
+          console.log(`Searching for merged pull requests with query: "${query}"`)
+          const { data: { items } } = await github.rest.search.issuesAndPullRequests({ q: query });
+          // Check if any merged pull requests were found
           if (!items || items.length === 0) {
-            throw new Error(`No merged pull requests found. Search query was: "${commit_hash} type:pr is:merged"`);
+            throw new Error(`No merged pull requests found. Search query was: "${query}"`);
           }
-          const pr_item = items.find(item => item.pull_request && item.pull_request.merged_at);
+          // Find the first pull request item that has a number property
+          const pr_item = items.find(item => item.number);
           if (!pr_item) {
-            throw new Error(`No merged pull requests found with a number property. Search query was: "${commit_hash} type:pr is:merged", items found: ${JSON.stringify(items)}`);
+            throw new Error(`No merged pull requests found with a number property. Search query was: "${query}", items found: ${JSON.stringify(items)}`);
           }
+          // Extract the pull request number and log it
           const pr_number = pr_item.number;
-          console.log(`The pull request number is ${pr_number}`);
+          console.log(`The pull request number is ${pr_number} of ${JSON.stringify(pr_item)}`);
+          // Return the pull request number for use in subsequent steps
           return pr_number;
     # Get the GitHub account name who created the merged pull request by the pull request number
     - name: Get the GitHub account name who created the merged pull request
