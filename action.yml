@@ -15,6 +15,14 @@ inputs:
       The message to be commented to the merged pull request.
       If we use back quotes in the message, we have to escape them.
     required: true
+  retry-times:
+    description: The number of times to retry the GitHub API request
+    required: false
+    default: "3"
+  retry-interval-seconds:
+    description: The interval in seconds between retries
+    required: false
+    default: "10"
 
 outputs:
   pull-request-number:
@@ -42,23 +50,47 @@ runs:
         script: |
           // Retrieve the commit hash from the previous step
           const commit_hash = "${{ steps.get_commit_hash.outputs.commit_hash }}";
-          // Search for merged pull requests containing the commit hash
           const query = `${commit_hash} type:pr is:merged`;
-          console.log(`Searching for merged pull requests with query: "${query}"`)
-          const { data: { items } } = await github.rest.search.issuesAndPullRequests({ q: query });
-          // Check if any merged pull requests were found
+          const retryTimes = parseInt(${{ inputs.retry-times }});
+          // Search for merged pull requests containing the commit hash
+          let items;
+          for (let attempt = 1; attempt <= retryTimes; attempt++) {
+            // Retry the GitHub API request if it fails, as the merged pull request can't be found immediately after the commit is merged
+            try {
+              // Search the pull request number whose pull request contains the commit hash
+              console.log(`Searching for merged pull requests with the query (attempt: ${attempt}): "${query}"`);
+              const response = await github.rest.search.issuesAndPullRequests({
+                q: `${commit_hash} type:pr is:merged`
+              });
+              items = response.data.items;
+              // If the items are found, not retrying
+              if (items && items.length > 0) {
+                break;
+              }
+            } catch (error) {
+              if (attempt === retryTimes) {
+                // If the retryTimes is reached, throw an error
+                throw new Error(`Failed to find merged pull requests after ${retryTimes} attempts. Search query was: "${commit_hash} type:pr is:merged"`);
+              }
+            }
+            // If the items are not found, retry after the interval
+            if (attempt < retryTimes) {
+              await new Promise(resolve => setTimeout(resolve, parseInt(${{ inputs.retry-interval-seconds }}) * 1000));
+            }
+          }
+          // Check if the items array is empty or undefined, and throw an error if true
           if (!items || items.length === 0) {
             throw new Error(`No merged pull requests found. Search query was: "${query}"`);
           }
-          // Find the first pull request item that has a number property
+          // Find the first item in the items array that has a number property
           const pr_item = items.find(item => item.number);
+          // If no such item exists, throw an error detailing the items that were found
           if (!pr_item) {
             throw new Error(`No merged pull requests found with a number property. Search query was: "${query}", items found: ${JSON.stringify(items)}`);
           }
-          // Extract the pull request number and log it
+          // Extract the number property from the found item
           const pr_number = pr_item.number;
           console.log(`The pull request number is ${pr_number} of ${JSON.stringify(pr_item)}`);
-          // Return the pull request number for use in subsequent steps
           return pr_number;
     # Get the GitHub account name who created the merged pull request by the pull request number
     - name: Get the GitHub account name who created the merged pull request
