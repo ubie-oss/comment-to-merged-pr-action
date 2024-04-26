@@ -72,9 +72,10 @@ runs:
                 console.log(`Can't find the merged pull request. Response data: ${JSON.stringify(response)}`);
               }
             } catch (error) {
+              console.error(`Attempt ${attempt} failed with error: ${error.message}`);
               if (attempt === retryTimes) {
                 // If the retryTimes is reached, throw an error
-                throw new Error(`Failed to find merged pull requests after ${retryTimes} attempts. Search query was: "${commit_hash} type:pr is:merged"`);
+                throw new Error(`Failed to find merged pull requests after ${retryTimes} attempts. Search query was: "${query}"`);
               }
             }
             // If the items are not found, retry after the interval
