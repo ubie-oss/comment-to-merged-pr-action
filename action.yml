@@ -67,6 +67,10 @@ runs:
               if (items && items.length > 0) {
                 break;
               }
+              else {
+                // Show the response data
+                console.log(`Can't find the merged pull requests. Response data: ${JSON.stringify(response)}`);
+              }
             } catch (error) {
               if (attempt === retryTimes) {
                 // If the retryTimes is reached, throw an error
