@@ -69,7 +69,7 @@ runs:
               }
               else {
                 // Show the response data
-                console.log(`Can't find the merged pull requests. Response data: ${JSON.stringify(response)}`);
+                console.log(`Can't find the merged pull request. Response data: ${JSON.stringify(response)}`);
               }
             } catch (error) {
               if (attempt === retryTimes) {
