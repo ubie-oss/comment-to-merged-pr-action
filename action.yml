@@ -44,14 +44,19 @@ runs:
     - name: Search the pull request number by the commit hash of the merged pull request
       id: get_pr_number
       uses: actions/github-script@v7
+      env:
+        COMMIT_HASH: ${{ steps.get_commit_hash.outputs.commit_hash }}
+        RETRY_TIMES: ${{ inputs.retry-times }}
+        RETRY_INTERVAL: ${{ inputs.retry-interval-seconds }}
       with:
         github-token: ${{ inputs.github-token }}
         debug: true
         script: |
           // Retrieve the commit hash from the previous step
-          const commit_hash = "${{ steps.get_commit_hash.outputs.commit_hash }}";
+          const commit_hash = process.env.COMMIT_HASH;
           const query = `${commit_hash} type:pr is:merged`;
-          const retryTimes = parseInt(${{ inputs.retry-times }});
+          const retryTimes = parseInt(process.env.RETRY_TIMES);
+          const retryInterval = parseInt(process.env.RETRY_INTERVAL);
           // Search for merged pull requests containing the commit hash
           let items;
           for (let attempt = 1; attempt <= retryTimes; attempt++) {
@@ -75,7 +80,7 @@ runs:
             }
             // If the items are not found, retry after the interval
             if (attempt < retryTimes) {
-              await new Promise(resolve => setTimeout(resolve, parseInt(${{ inputs.retry-interval-seconds }}) * 1000));
+              await new Promise(resolve => setTimeout(resolve, retryInterval * 1000));
             }
           }
           // Check if the items array is empty or undefined, and throw an error if true
@@ -96,12 +101,14 @@ runs:
     - name: Get the GitHub account name who created the merged pull request
       id: get_pr_creator
       uses: actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.get_pr_number.outputs.result }}
       with:
         github-token: ${{ inputs.github-token }}
         debug: true
         result-encoding: string
         script: |
-          const pr_number = "${{ steps.get_pr_number.outputs.result }}";
+          const pr_number = process.env.PR_NUMBER;
           const pr = await github.rest.pulls.get({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -113,12 +120,18 @@ runs:
     # Create a comment to the merged pull request
     - name: Comment to the merged pull request
       uses: actions/github-script@v7
+      env:
+        PR_NUMBER: ${{ steps.get_pr_number.outputs.result }}
+        PR_CREATOR: ${{ steps.get_pr_creator.outputs.result }}
+        MESSAGE: ${{ inputs.message }}
       with:
         github-token: ${{ inputs.github-token }}
         debug: true
         script: |
-          const pr_number = "${{ steps.get_pr_number.outputs.result }}";
-          const body = `@${{ steps.get_pr_creator.outputs.result }}\n${{ inputs.message }}`;
+          const pr_number = process.env.PR_NUMBER;
+          const pr_creator = process.env.PR_CREATOR;
+          const message = process.env.MESSAGE;
+          const body = `@${pr_creator}\n${message}`;
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
