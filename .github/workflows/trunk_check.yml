@@ -18,7 +18,7 @@ jobs:
       contents: read # For repo checkout
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # NOTE Trunk.io doesn't support OPA yet in Feburuary, 2024.
       #      We need something else to check the policy.
       - name: Trunk Check
