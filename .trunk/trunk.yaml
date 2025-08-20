@@ -19,7 +19,7 @@ runtimes:
 lint:
   enabled:
     - codespell@2.4.1
-    - semgrep@1.131.0
+    - semgrep@1.132.1
     - gitleaks@8.28.0
     - osv-scanner@2.0.3
     - actionlint@1.7.7
@@ -28,7 +28,7 @@ lint:
     - markdownlint@0.45.0
     - prettier@3.6.2
     - trivy@0.64.1
-    - trufflehog@3.90.3
+    - trufflehog@3.90.5
     - yamllint@1.37.1
 actions:
   enabled:
