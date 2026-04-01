@@ -43,7 +43,7 @@ runs:
     # Get the pull request number whose pull request contains the commit hash using github-script
     - name: Search the pull request number by the commit hash of the merged pull request
       id: get_pr_number
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       env:
         COMMIT_HASH: ${{ steps.get_commit_hash.outputs.commit_hash }}
         RETRY_TIMES: ${{ inputs.retry-times }}
@@ -100,7 +100,7 @@ runs:
     # Get the GitHub account name who created the merged pull request by the pull request number
     - name: Get the GitHub account name who created the merged pull request
       id: get_pr_creator
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       env:
         PR_NUMBER: ${{ steps.get_pr_number.outputs.result }}
       with:
@@ -119,7 +119,7 @@ runs:
           return pr_creator;
     # Create a comment to the merged pull request
     - name: Comment to the merged pull request
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       env:
         PR_NUMBER: ${{ steps.get_pr_number.outputs.result }}
         PR_CREATOR: ${{ steps.get_pr_creator.outputs.result }}
