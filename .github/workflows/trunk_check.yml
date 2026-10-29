@@ -22,4 +22,4 @@ jobs:
       # NOTE Trunk.io doesn't support OPA yet in Feburuary, 2024.
       #      We need something else to check the policy.
       - name: Trunk Check
-        uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # ratchet:trunk-io/trunk-action@v1.3.1
+        uses: trunk-io/trunk-action@e1234e67a86010d61ddac8d8ebf4b783e2ffd2fa # ratchet:trunk-io/trunk-action@v2.0.0
